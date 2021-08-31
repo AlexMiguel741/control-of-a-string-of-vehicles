@@ -6,4 +6,6 @@ Stability and Performance analysis once developed LMI-based control strategies f
 
 Implemented in Matlab and Simulink.
 
-Attached the Report PDF
+Attached the PDF report 
+[Click here](https://github.com/AlexMiguel741/control-of-a-string-of-vehicles/blob/main/Project%20Franco_Savino.pdf)
+
