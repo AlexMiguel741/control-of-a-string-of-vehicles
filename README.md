@@ -1,7 +1,29 @@
 # Networked Control of Autonomous Vehicle Platoons
 
+
+
+
 ### Project Overview
 This project implements a **Distributed Control System (DCS)** to coordinate a platoon of four autonomous vehicles, focusing on string stability and formation maintenance. The system models the longitudinal dynamics of coupled agents, where each vehicle's state is defined by its **velocity ($v_i$)** and **relative distance ($d_i$)** to the preceding vehicle. The control objective is to regulate inter-vehicle spacing and track a reference velocity using a **Multi-Input Multi-Output (MIMO)** state-space approach.
+
+<p align="center">
+  <img src="Images/System.png" width="600" alt="Convergence Plot Comparison">
+  <br>
+  <em>Figure 1: Overall System</em>
+</p>
+
+<p align="center">
+  <img src="Images/continous time.png" width="600" alt="Convergence Plot Comparison">
+  <br>
+  <em>Figure 2: Continuous Time</em>
+</p>
+
+<p align="center">
+  <img src="Images/discrete time.png" width="600" alt="Convergence Plot Comparison">
+  <br>
+  <em>Figure 3: Discrete Time</em>
+</p>
+
 
 ### Methodology & Network Topologies
 The study evaluates the impact of information constraints on system stability by implementing **seven distinct communication graphs** in both Continuous Time (CT) and Discrete Time (DT):
@@ -12,6 +34,15 @@ The study evaluates the impact of information constraints on system stability by
 *   **Cycle (Ring) Topology:** Implemented with Forward, Backward, and Bidirectional loops to test stability under cyclic information flow.
 
 For each topology, stability was verified by analyzing the eigenvalues of the closed-loop system matrix ($A+BK$), ensuring all modes lie within the stable region (left half-plane for CT, unit circle for DT).
+
+
+
+<p align="center">
+  <img src="Images/control1.png" width="600" alt="Convergence Plot Comparison">
+  <br>
+  <em>Figure 4: Control Strcutures</em>
+</p>
+
 
 ### Key Results
 *   **Convergence Speed:** Centralized control yielded the fastest settling time ($\approx 7.5s$) due to full state availability.
