@@ -40,7 +40,7 @@ For each topology, stability was verified by analyzing the eigenvalues of the cl
 <p align="center">
   <img src="Images/control1.png" width="600" alt="Convergence Plot Comparison">
   <br>
-  <em>Figure 4: Control Strcutures</em>
+  <em>Figure 4: Control Structures</em>
 </p>
 
 
