@@ -1,51 +1,76 @@
-# Networked Control of an Autonomous Vehicle Platoon
+# Decentralized Networked Control of a Vehicle Platoon
 
-**MSc project · Politecnico di Milano** · with G. M. D. Savino
+![MATLAB](https://img.shields.io/badge/MATLAB-0076A8?logo=mathworks&logoColor=white)
+![Simulink](https://img.shields.io/badge/Simulink-0076A8?logo=mathworks&logoColor=white)
+![Method](https://img.shields.io/badge/Control-LMI%20%7C%20State%20Feedback-orange)
 
-Four autonomous vehicles driving in a column must keep a safe distance and follow a reference
-speed. The open-loop system is **unstable**. Each car only knows what its communication links
-tell it: how much information do they really need to share?
+MSc project · Politecnico di Milano · A. M. Franco, G. M. D. Savino
 
-<p align="center">
-  <img src="Images/System.png" width="600" alt="Platoon system">
-</p>
+## Overview
 
-## Results
+Design and analysis of **state-feedback controllers for a platoon of 4 vehicles** under
+different communication topologies. The open-loop system is unstable; each controller only
+uses the states available through its communication graph. Gains are computed with **LMI
+optimization** in continuous and discrete time.
 
-- **Stabilised in every configuration**, both continuous time and discrete time
-  (state-feedback gains computed with LMI optimisation)
-- **No fixed modes** in any of the decentralised information structures
-- **Sparse communication is enough**: star and cycle topologies reach settling times similar to
-  the centralised controller (about 10–15 s)
+<p align="center"><img src="Images/System.png" width="600" alt="Platoon system"></p>
 
-<p align="center">
-  <img src="Images/control1.png" width="600" alt="Control structures">
-</p>
+## Key Results
 
-## What I did
+- Closed-loop **asymptotic stability achieved for all information structures**, in both CT and DT
+- **No fixed modes** in any of the decentralized structures
+- **Comparable settling times (~10–15 s) across all schemes**: sparse topologies (star, cycle)
+  match the centralized controller
+- Decentralized / star-unidirectional and cycle-previous / cycle-bidirectional show near-identical
+  dynamics, due to closed-loop matrices differing only in small off-diagonal terms
 
-- State-space **MIMO model** of the platoon (velocity and relative distance of each vehicle)
-- Controller synthesis via **LMI** for several information structures: centralised,
-  decentralised, star (uni/bidirectional), cycle (forward/backward/bidirectional)
-- Stability check through closed-loop eigenvalues and spectral abscissa
-- **Fixed-mode analysis** for each decentralised structure
-- Simulation in **Simulink**, comparing continuous and discrete-time implementations
+## System Model
 
-<p align="center">
-  <img src="Images/continous time.png" width="45%" alt="Continuous time">
-  <img src="Images/discrete time.png" width="45%" alt="Discrete time">
-</p>
+- MIMO linear state-space model; states per vehicle: velocity `v_i` and inter-vehicle distance `d_i`
+- Continuous-time model and discretized model for digital implementation
 
-## Stack
+## Control Structures
 
-MATLAB · Simulink · LMI optimisation · Graph theory
-
-## Files
-
-| File | Content |
+| Structure | Information flow |
 | :-- | :-- |
-| [`project_06_StringVehicles_FrancoSavino.m`](project_06_StringVehicles_FrancoSavino.m) | Main script: model, controllers, analysis |
-| [`LMI_CT_DeDicont.m`](LMI_CT_DeDicont.m), [`LMI_DT_DeDicont.m`](LMI_DT_DeDicont.m) | LMI controller synthesis (continuous / discrete time) |
-| [`di_fixed_modes.m`](di_fixed_modes.m) | Fixed-mode analysis |
-| [`CT_models.slx`](CT_models.slx) | Simulink models |
-| [`Project Franco_Savino.pdf`](Project%20Franco_Savino.pdf) | Project presentation |
+| Centralized | Full state available to all controllers |
+| Decentralized | Local state only |
+| Star | Unidirectional and bidirectional, center ↔ leaves |
+| Cycle | Forward, backward and bidirectional ring |
+
+<p align="center"><img src="Images/control1.png" width="600" alt="Control structures"></p>
+
+## Methodology
+
+1. Controller synthesis via **LMI** with structural constraints on the gain matrix (CT and DT)
+2. Stability verification through closed-loop eigenvalues and spectral abscissa / radius
+3. **Fixed-mode analysis** for each decentralized information structure
+4. Time-domain simulation in **Simulink**: relative / absolute positions and speed profiles,
+   CT vs DT comparison
+
+<p align="center">
+  <img src="Images/continous time.png" width="45%" alt="Continuous time response">
+  <img src="Images/discrete time.png" width="45%" alt="Discrete time response">
+</p>
+
+## Tech Stack
+
+MATLAB · Simulink · YALMIP · LMI optimization · Graph theory
+
+## Repository Structure
+
+```
+├── project_06_StringVehicles_FrancoSavino.m   # Main script: controller design, analysis, plots
+├── 06_StringVehicles.m                        # Plant model (course material)
+├── LMI_CT_DeDicont.m                          # LMI routine, continuous time
+├── LMI_DT_DeDicont.m                          # LMI routine, discrete time
+├── di_fixed_modes.m                           # Fixed-mode computation
+├── CT_models.slx                              # Simulink models
+├── Images/                                    # Figures
+└── Project Franco_Savino.pdf                  # Project presentation
+```
+
+## Run
+
+Run `project_06_StringVehicles_FrancoSavino.m` in MATLAB (requires Simulink and YALMIP with an
+SDP solver).
