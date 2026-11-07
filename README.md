@@ -1,56 +1,51 @@
-# Networked Control of Autonomous Vehicle Platoons
+# Networked Control of an Autonomous Vehicle Platoon
 
+**MSc project · Politecnico di Milano** · with G. M. D. Savino
 
-
-
-### Project Overview
-This project implements a **Distributed Control System (DCS)** to coordinate a platoon of four autonomous vehicles, focusing on string stability and formation maintenance. The system models the longitudinal dynamics of coupled agents, where each vehicle's state is defined by its **velocity ($v_i$)** and **relative distance ($d_i$)** to the preceding vehicle. The control objective is to regulate inter-vehicle spacing and track a reference velocity using a **Multi-Input Multi-Output (MIMO)** state-space approach.
-
-<p align="center">
-  <img src="Images/System.png" width="600" alt="Convergence Plot Comparison">
-  <br>
-  <em>Figure 1: Overall System</em>
-</p>
+Four autonomous vehicles driving in a column must keep a safe distance and follow a reference
+speed. The open-loop system is **unstable**. Each car only knows what its communication links
+tell it: how much information do they really need to share?
 
 <p align="center">
-  <img src="Images/continous time.png" width="600" alt="Convergence Plot Comparison">
-  <br>
-  <em>Figure 2: Continuous Time</em>
+  <img src="Images/System.png" width="600" alt="Platoon system">
 </p>
+
+## Results
+
+- **Stabilised in every configuration**, both continuous time and discrete time
+  (state-feedback gains computed with LMI optimisation)
+- **No fixed modes** in any of the decentralised information structures
+- **Sparse communication is enough**: star and cycle topologies reach settling times similar to
+  the centralised controller (about 10–15 s)
 
 <p align="center">
-  <img src="Images/discrete time.png" width="600" alt="Convergence Plot Comparison">
-  <br>
-  <em>Figure 3: Discrete Time</em>
+  <img src="Images/control1.png" width="600" alt="Control structures">
 </p>
 
+## What I did
 
-### Methodology & Network Topologies
-The study evaluates the impact of information constraints on system stability by implementing **seven distinct communication graphs** in both Continuous Time (CT) and Discrete Time (DT):
-
-*   **Centralized Control:** Uses global state information for optimal feedback.
-*   **Decentralized (Full Mesh):** All agents exchange state data directly.
-*   **Star Topology:** Tested in both unidirectional (Center $\to$ Leaves) and bidirectional configurations to analyze node-dependency.
-*   **Cycle (Ring) Topology:** Implemented with Forward, Backward, and Bidirectional loops to test stability under cyclic information flow.
-
-For each topology, stability was verified by analyzing the eigenvalues of the closed-loop system matrix ($A+BK$), ensuring all modes lie within the stable region (left half-plane for CT, unit circle for DT).
-
-
+- State-space **MIMO model** of the platoon (velocity and relative distance of each vehicle)
+- Controller synthesis via **LMI** for several information structures: centralised,
+  decentralised, star (uni/bidirectional), cycle (forward/backward/bidirectional)
+- Stability check through closed-loop eigenvalues and spectral abscissa
+- **Fixed-mode analysis** for each decentralised structure
+- Simulation in **Simulink**, comparing continuous and discrete-time implementations
 
 <p align="center">
-  <img src="Images/control1.png" width="600" alt="Convergence Plot Comparison">
-  <br>
-  <em>Figure 4: Control Structures</em>
+  <img src="Images/continous time.png" width="45%" alt="Continuous time">
+  <img src="Images/discrete time.png" width="45%" alt="Discrete time">
 </p>
 
+## Stack
 
-### Key Results
-*   **Convergence Speed:** Centralized control yielded the fastest settling time ($\approx 7.5s$) due to full state availability.
-*   **Stability under Constraints:** Both Star and Cycle architectures successfully stabilized the open-loop unstable system, demonstrating that formation rigidity can be maintained with sparse communication links.
-*   **Discretization Effects:** Discrete-time simulations ($T_s = 0.1s$) confirmed that digital implementation introduces negligible performance degradation compared to continuous baselines, validating the controller's robustness for real-time embedded deployment.
-*   **Spectral Analysis:** The analysis of "Fixed Modes" confirmed controllability across all proposed decentralized information structures, ensuring no hidden unstable modes existed despite limited connectivity.
+MATLAB · Simulink · LMI optimisation · Graph theory
 
-### Tools Used
-*   MATLAB
-*   Simulink
-*   Graph Theory
+## Files
+
+| File | Content |
+| :-- | :-- |
+| [`project_06_StringVehicles_FrancoSavino.m`](project_06_StringVehicles_FrancoSavino.m) | Main script: model, controllers, analysis |
+| [`LMI_CT_DeDicont.m`](LMI_CT_DeDicont.m), [`LMI_DT_DeDicont.m`](LMI_DT_DeDicont.m) | LMI controller synthesis (continuous / discrete time) |
+| [`di_fixed_modes.m`](di_fixed_modes.m) | Fixed-mode analysis |
+| [`CT_models.slx`](CT_models.slx) | Simulink models |
+| [`Project Franco_Savino.pdf`](Project%20Franco_Savino.pdf) | Project presentation |
